@@ -1,0 +1,2009 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>轻盈计划 · 减脂食谱与打卡</title>
+<style>
+:root {
+  --bg: #171513;
+  --panel: #24201b;
+  --panel2: #2d271f;
+  --gold: #d7a958;
+  --gold-light: #eac579;
+  --cream: #f8efdf;
+  --muted: #a99e8e;
+  --line: #40372d;
+  --green: #9bb875;
+  --red: #c97070;
+  --radius: 17px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: radial-gradient(circle at 50% -10%, #3b2e20 0%, #171513 42%);
+  color: var(--cream);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft Yahei", sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button { font: inherit; color: inherit; border: 0; cursor: pointer; background: none; }
+
+.app {
+  max-width: 720px;
+  margin: auto;
+  padding: 22px 16px 100px;
+}
+
+/* ---- Typography ---- */
+.eyebrow {
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ---- Header ---- */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.top h1 {
+  font: 700 28px/1.2 Georgia, serif;
+  margin: 4px 0;
+}
+
+.date { color: var(--muted); font-size: 13px; }
+
+.mark {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid #765d32;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  font-size: 20px;
+  transition: var(--transition);
+}
+
+.mark:active { transform: scale(0.9); }
+
+/* ---- Views ---- */
+.view {
+  display: none;
+  animation: viewIn 0.35s ease-out;
+}
+
+.view.active { display: block; }
+
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Hero ---- */
+.hero {
+  background: linear-gradient(135deg, #574222, #2b251d);
+  border: 1px solid #765b31;
+  border-radius: 22px;
+  padding: 24px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '✦';
+  position: absolute;
+  right: 25px;
+  top: 12px;
+  color: #eac57940;
+  font-size: 90px;
+  pointer-events: none;
+}
+
+.hero h2 {
+  font: 700 24px Georgia, serif;
+  margin: 6px 0 10px;
+}
+
+.hero p {
+  color: #e8d8ba;
+  max-width: 75%;
+}
+
+/* ---- Stats ---- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.stat {
+  background: #17130f55;
+  padding: 12px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.stat b {
+  display: block;
+  font-size: 18px;
+  color: var(--gold);
+}
+
+.stat small { color: #d8c8ad; font-size: 12px; }
+
+/* ---- Section Head ---- */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 12px;
+}
+
+.section-head h3 {
+  font: 700 19px Georgia, serif;
+}
+
+.text-btn {
+  color: var(--gold);
+  font-size: 13px;
+  transition: var(--transition);
+}
+
+.text-btn:active { opacity: 0.6; }
+
+/* ---- Tabs & Chips ---- */
+.tabs, .chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 15px;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar, .chips::-webkit-scrollbar { display: none; }
+
+.tabs button, .chips button {
+  white-space: nowrap;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 8px 16px;
+  border-radius: 99px;
+  color: var(--muted);
+  font-size: 13px;
+  transition: var(--transition);
+}
+
+.tabs button:active, .chips button:active { transform: scale(0.95); }
+
+.tabs button.active, .chips button.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #251b0e;
+  font-weight: 600;
+}
+
+/* ---- Search ---- */
+.search-wrap {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.search-wrap input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 14px 10px 38px;
+  color: var(--cream);
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-wrap input:focus { border-color: var(--gold); }
+.search-wrap input::placeholder { color: var(--muted); }
+
+.search-wrap::before {
+  content: '⌕';
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* ---- Recipe Grid ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  min-height: 160px;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(215,169,88,0.05), transparent);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.card:active { transform: scale(0.97); }
+.card:hover::before { opacity: 1; }
+
+.card .emoji { font-size: 32px; }
+.card h4 { margin: 8px 0 4px; font-size: 15px; }
+.meta { color: var(--muted); font-size: 12px; }
+
+.badge {
+  display: inline-block;
+  color: var(--gold);
+  background: #4a392144;
+  border: 1px solid #755a3444;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  margin: 6px 4px 0 0;
+  transition: var(--transition);
+}
+
+.badge:active { transform: scale(0.9); }
+
+/* ---- Check-in ---- */
+/* ---- Compact Check-in Blocks ---- */
+.check-group {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.check-group-title {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.check-blocks {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.check-block {
+  flex: 1;
+  min-width: 80px;
+  background: #39332c;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.check-block:hover {
+  transform: translateY(-2px);
+  border-color: #80683e;
+}
+
+.check-block.done {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #2b2112;
+}
+
+.check-block b {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.check-block small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.check-block.done small {
+  color: #4a3f2f;
+}
+
+/* ---- Water Slider ---- */
+.water-slider-container {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.water-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.water-slider-header b {
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.water-slider-track {
+  position: relative;
+  height: 48px;
+  background: #39332c;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.water-slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #3a7cbd, #5bb5e8);
+  border-radius: 12px 0 0 12px;
+  transition: width 0.2s ease;
+  pointer-events: none;
+}
+
+.water-slider-markers {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  pointer-events: none;
+}
+
+.water-marker {
+  width: 2px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 1px;
+  transition: background 0.2s;
+}
+
+.water-marker.active {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.water-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.water-slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 3px solid #5bb5e8;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  transition: left 0.2s ease, transform 0.15s ease;
+  z-index: 2;
+}
+
+.water-slider-thumb.snap {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* ---- Legacy Check Card (kept for compatibility) ---- */
+.check-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 15px;
+  margin-bottom: 10px;
+  transition: var(--transition);
+}
+
+.check-card.just-done {
+  animation: checkPulse 0.5s ease;
+}
+
+@keyframes checkPulse {
+  0% { box-shadow: 0 0 0 0 rgba(215,169,88,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(215,169,88,0); }
+  100% { box-shadow: 0 0 0 0 rgba(215,169,88,0); }
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.check {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #80683e;
+  border-radius: 8px;
+  font-size: 15px;
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.check.done {
+  background: var(--gold);
+  color: #21190e;
+  border-color: var(--gold);
+  animation: checkBounce 0.35s ease;
+}
+
+@keyframes checkBounce {
+  0% { transform: scale(0.7); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.check-title { flex: 1; }
+.check-title b { display: block; font-size: 15px; }
+.check-title small { color: var(--muted); font-size: 12px; }
+
+/* ---- Water Tracker ---- */
+.water-tracker {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.water-cups {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.water-cup {
+  width: 36px;
+  height: 42px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px 4px 8px 8px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.water-cup.filled {
+  border-color: #5b9bd5;
+  background: linear-gradient(to top, #3a7cbd33, #5bb5e833);
+}
+
+.water-cup.filled::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(to top, #5bb5e844, transparent);
+  animation: waterFill 0.4s ease;
+}
+
+@keyframes waterFill {
+  from { height: 0; }
+  to { height: 100%; }
+}
+
+.water-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.water-info b { color: var(--gold); font-size: 16px; }
+
+/* ---- Progress Bar ---- */
+.progress {
+  height: 8px;
+  background: #3a332b;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 18px 0 8px;
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- History / Heatmap ---- */
+.history {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 18px 0;
+}
+
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.history-top h3 { font: 700 18px Georgia, serif; }
+.history-top b { color: var(--gold); font-size: 20px; line-height: 1.3; }
+.history-top small { color: var(--muted); }
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 8px;
+}
+
+.weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.weekday-header span {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 36px;
+  gap: 4px;
+  align-content: start;
+  height: auto;
+}
+
+.day {
+  border-radius: 8px;
+  background: #39332c;
+  position: relative;
+  padding: 0;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #c8bba8;
+}
+
+.day.empty {
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+  padding: 0;
+  grid-column: auto;
+}
+
+.day:hover:not(.empty) { transform: scale(1.2); z-index: 1; }
+
+.day.done { background: var(--gold); color: #2b2112; font-weight: 600; }
+.day.partial { background: #8b7340; color: #fff; }
+
+.day.today {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
+
+.day.selected {
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 0 3px rgba(215, 169, 88, 0.3);
+}
+
+.day.selected.today {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+  border: 2px solid var(--gold);
+}
+
+.day-details {
+  border-top: 1px solid var(--line);
+  margin-top: 15px;
+  padding-top: 12px;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.day-details h4 { margin: 0 0 8px; color: var(--gold); font-size: 14px; }
+.day-details p { margin: 4px 0; color: var(--muted); font-size: 13px; }
+.day-details h5 { margin: 10px 0 4px; color: var(--gold); font-size: 12px; }
+
+.detail-group { margin-bottom: 8px; }
+
+.status-block {
+  display: inline-block;
+  border-radius: 7px;
+  padding: 4px 9px;
+  margin: 2px 4px 2px 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-block.done { background: #345b3b; color: #b9e1b4; }
+.status-block.not-done { background: #5a3030; color: #f0b6a5; }
+
+/* ---- Stats Summary ---- */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.summary-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.summary-card b {
+  display: block;
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+
+.summary-card small { color: var(--muted); font-size: 11px; }
+
+/* ---- Meal Plan ---- */
+.meal-plan {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  margin-top: 18px;
+}
+
+.meal-plan-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.meal-plan h3 { font: 700 18px Georgia, serif; }
+.meal-plan small { color: var(--muted); }
+
+.meal-card {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.meal-card:first-child { margin-top: 0; }
+.meal-card:active { transform: scale(0.98); }
+
+.meal-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.meal-icon { font-size: 26px; }
+.meal-card b { display: block; font-size: 15px; }
+.meal-card .meta { margin-top: 3px; }
+
+/* ---- Bottom Nav ---- */
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, 100%);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #211d19f0;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--line);
+  padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+  z-index: 3;
+}
+
+.bottom button {
+  color: var(--muted);
+  font-size: 11px;
+  padding: 6px 0;
+  transition: var(--transition);
+  position: relative;
+}
+
+.bottom button span {
+  display: block;
+  font-size: 22px;
+  line-height: 22px;
+  margin-bottom: 3px;
+  transition: var(--transition);
+}
+
+.bottom button.active { color: var(--gold); }
+
+.bottom button.active::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  animation: indicatorIn 0.3s ease;
+}
+
+@keyframes indicatorIn {
+  from { width: 0; opacity: 0; }
+  to { width: 20px; opacity: 1; }
+}
+
+/* ---- Modal ---- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #080706cc;
+  display: none;
+  align-items: flex-end;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+}
+
+.modal.show {
+  display: flex;
+  animation: modalBgIn 0.3s ease;
+}
+
+@keyframes modalBgIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sheet {
+  width: min(720px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #28231e;
+  border-radius: 24px 24px 0 0;
+  padding: 22px 20px 36px;
+  animation: sheetUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.close {
+  float: right;
+  background: #40362b;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+}
+
+.close:active { transform: scale(0.9); }
+
+.sheet h2 { font: 700 24px Georgia, serif; margin: 8px 0 12px; }
+.sheet h4 { color: var(--gold); margin: 20px 0 8px; font-size: 14px; }
+.sheet ul, .sheet ol { padding-left: 20px; color: #dfd2bd; }
+.sheet ol li { margin-bottom: 6px; }
+.source { font-size: 12px; color: var(--muted); margin-top: 20px; }
+
+.recipe-check {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 12px;
+  padding: 13px;
+  background: var(--gold);
+  color: #251b0e;
+  font-weight: 700;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.recipe-check:active { transform: scale(0.98); opacity: 0.9; }
+
+/* ---- Empty State ---- */
+.empty {
+  grid-column: 1/-1;
+  color: var(--muted);
+  padding: 32px;
+  text-align: center;
+  background: var(--panel);
+  border-radius: 16px;
+}
+
+/* ---- Export Button ---- */
+.export-btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--gold);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  transition: var(--transition);
+  margin-top: 12px;
+}
+
+.export-btn:active { transform: scale(0.96); }
+
+/* ---- Celebration ---- */
+.celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: confettiFall 1.5s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ---- Responsive ---- */
+@media (min-width: 600px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .heatmap { gap: 6px; grid-auto-rows: 40px; }
+  .day { font-size: 14px; }
+}
+
+@media (max-width: 380px) {
+  .stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .stat b { font-size: 16px; }
+  .heatmap { gap: 3px; grid-auto-rows: 30px; }
+  .day { font-size: 11px; }
+}
+
+/* ---- Marquee: Inline (方案C - 食谱库分隔带) ---- */
+.marquee {
+  overflow: hidden;
+  background: linear-gradient(90deg, #1a1510, #2a2018, #1a1510);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 9px 0;
+  margin-bottom: 15px;
+}
+
+.marquee .marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 25s linear infinite;
+}
+
+.marquee .marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.marquee .marquee-text {
+  font: 600 13px Georgia, serif;
+  color: var(--gold);
+  white-space: nowrap;
+  padding: 0 28px;
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+}
+
+.marquee .marquee-text .dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin: 0 18px;
+  vertical-align: middle;
+  opacity: 0.4;
+}
+
+/* ---- Mosaic Banner (方案A - 底部 Canvas 马赛克，TRAE 风格) ---- */
+.mosaic-banner {
+  position: fixed;
+  bottom: 72px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 2;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.mosaic-banner canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.app {
+  padding-bottom: 160px;
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div>
+      <div class="eyebrow">轻盈计划 · LEAN DAILY</div>
+      <h1>今日减脂</h1>
+      <div class="date" id="today"></div>
+    </div>
+    <div class="mark">✦</div>
+  </header>
+
+  <!-- Home View -->
+  <section id="home" class="view active">
+    <div class="hero">
+      <div class="eyebrow" id="heroDay">DAY 01 · 温和开始</div>
+      <h2>吃得刚刚好，<br>坚持就有答案。</h2>
+      <p>今天也为自己准备一份轻盈、满足的餐盘吧。</p>
+      <div class="stats">
+        <div class="stat"><b id="homeProgress">0%</b><small>今日完成</small></div>
+        <div class="stat"><b id="homeKcal">1,650</b><small>建议 kcal</small></div>
+        <div class="stat"><b id="homeStreak">0</b><small>连续天数</small></div>
+      </div>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        <div class="marquee-text">
+          每日蛋白质摄入建议：体重kg × 1.2~1.6g<span class="dot"></span>减脂期热量缺口控制在300~500kcal<span class="dot"></span>膳食纤维每日25~30g有助于饱腹感<span class="dot"></span>烹饪用油建议每日不超过25g<span class="dot"></span>多喝水提升代谢，每天至少1500ml
+        </div>
+        <div class="marquee-text">
+          每日蛋白质摄入建议：体重kg × 1.2~1.6g<span class="dot"></span>减脂期热量缺口控制在300~500kcal<span class="dot"></span>膳食纤维每日25~30g有助于饱腹感<span class="dot"></span>烹饪用油建议每日不超过25g<span class="dot"></span>多喝水提升代谢，每天至少1500ml
+        </div>
+      </div>
+    </div>
+    <div class="meal-plan">
+      <div class="meal-plan-head">
+        <div>
+          <h3>今日三餐安排</h3>
+          <small>随机组成一组轻盈餐单</small>
+        </div>
+        <button class="text-btn" onclick="randomMealPlan()">换一组 ↻</button>
+      </div>
+      <div id="mealPlan"></div>
+    </div>
+  </section>
+
+  <!-- Recipes View -->
+  <section id="recipes" class="view">
+    <div class="section-head">
+      <h3>食谱库</h3>
+      <span class="meta" id="count"></span>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="搜索食谱名称或食材..." oninput="handleSearch()">
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="recipeGrid"></div>
+  </section>
+
+  <!-- Check-in View -->
+  <section id="checkin" class="view">
+    <div class="section-head">
+      <h3>今日打卡</h3>
+      <span class="meta" id="checkinDate"></span>
+    </div>
+    <div class="hero">
+      <div class="eyebrow">坚持记录 · 看见变化</div>
+      <h2 id="checkTitle">完成今天的第一步</h2>
+      <div class="progress"><i id="bar"></i></div>
+      <div class="meta" id="progressText">0 / 7 项</div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+      <div class="summary-card">
+        <b id="weekRate">0%</b>
+        <small>本周完成率</small>
+      </div>
+      <div class="summary-card">
+        <b id="monthDays">0</b>
+        <small>本月打卡天数</small>
+      </div>
+      <div class="summary-card">
+        <b id="bestStreak">0</b>
+        <small>最长连续</small>
+      </div>
+    </div>
+
+    <div id="checkList"></div>
+
+    <!-- Water Tracker (legacy, hidden - using slider instead) -->
+    <div class="water-tracker" style="display:none">
+      <div class="water-info">
+        <div>
+          <b id="waterCount">0</b>
+          <small style="color:var(--muted)"> / 8 杯水</small>
+        </div>
+        <button class="text-btn" onclick="resetWater()">重置</button>
+      </div>
+      <div class="water-cups" id="waterCups"></div>
+    </div>
+
+    <!-- History -->
+    <div class="history">
+      <div class="history-top">
+        <div>
+          <h3 id="calendarTitle">2026 年 8 月</h3>
+          <small id="calendarSubtitle">点击日期可补卡</small>
+        </div>
+        <div>
+          <b id="historyStats">○ 待完成</b>
+        </div>
+      </div>
+      <div class="calendar-nav">
+        <button class="text-btn" onclick="changeMonth(-1)">◀ 上月</button>
+        <button class="text-btn" onclick="changeMonth(1)">下月 ▶</button>
+      </div>
+      <div class="weekday-header">
+        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+      </div>
+      <div class="heatmap" id="heatmap"></div>
+      <div class="day-details" id="dayDetails"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button class="export-btn" onclick="exportData()">导出数据 (JSON)</button>
+      <button class="export-btn" onclick="importData()">导入数据</button>
+    </div>
+    <div class="source">数据保存在当前浏览器中，关闭页面后仍会保留。</div>
+  </section>
+</main>
+
+<nav class="bottom">
+  <button class="active" data-view="home"><span>🏠</span>首页</button>
+  <button data-view="recipes"><span>📖</span>食谱库</button>
+  <button data-view="checkin"><span>✅</span>打卡</button>
+</nav>
+
+<div class="mosaic-banner">
+  <canvas id="mosaicCanvas"></canvas>
+</div>
+
+<div class="modal" id="modal">
+  <article class="sheet">
+    <button class="close" id="close">×</button>
+    <div id="detail"></div>
+  </article>
+</div>
+
+<div class="celebration" id="celebration"></div>
+
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<script>
+// ---- Data ----
+const recipes = [
+  { id:1, name:'香煎鸡胸藜麦碗', cat:'午餐', tags:['高蛋白','低卡'], emoji:'🥗', kcal:468, time:'20 min', ingredients:'鸡胸肉 120g · 藜麦 60g · 生菜 · 小番茄 · 黑胡椒', steps:'鸡胸肉用黑胡椒和少许盐腌制。\n藜麦煮熟沥干，蔬菜洗净切好。\n平底锅少油煎熟鸡胸肉，切片后组合装盘。' },
+  { id:2, name:'希腊酸奶莓果杯', cat:'早餐', tags:['快手','低卡'], emoji:'🍓', kcal:286, time:'5 min', ingredients:'无糖希腊酸奶 180g · 蓝莓 · 草莓 · 燕麦 20g', steps:'将酸奶铺入杯底。\n加入莓果和燕麦，重复叠放即可。' },
+  { id:3, name:'虾仁西兰花炒饭', cat:'晚餐', tags:['高蛋白','快手'], emoji:'🍤', kcal:392, time:'15 min', ingredients:'虾仁 100g · 米饭 100g · 西兰花 · 鸡蛋 1 个', steps:'西兰花焯水，虾仁擦干。\n鸡蛋炒散后加入虾仁和西兰花。\n加入米饭翻炒，少许酱油调味。' },
+  { id:4, name:'番茄豆腐汤', cat:'晚餐', tags:['低卡','素食'], emoji:'🍅', kcal:210, time:'15 min', ingredients:'番茄 2 个 · 嫩豆腐 200g · 紫菜 · 葱花', steps:'番茄切块炒出汁。\n加入清水和豆腐煮沸。\n放入紫菜，撒葱花即可。' },
+  { id:5, name:'香蕉蛋白燕麦', cat:'早餐', tags:['高蛋白','快手'], emoji:'🥣', kcal:335, time:'8 min', ingredients:'燕麦 40g · 香蕉半根 · 牛奶 150ml · 蛋白粉 1 勺', steps:'燕麦与牛奶小火煮至浓稠。\n关火后拌入蛋白粉，放上香蕉片。' },
+  { id:6, name:'牛肉生菜卷', cat:'午餐', tags:['高蛋白','低卡'], emoji:'🥬', kcal:410, time:'18 min', ingredients:'瘦牛肉 120g · 生菜 · 彩椒 · 洋葱 · 低脂酱料', steps:'牛肉和彩椒切条。\n牛肉炒熟后与洋葱拌匀。\n用生菜包裹食用。' },
+  { id:7, name:'牛油果鸡蛋吐司', cat:'早餐', tags:['高蛋白','快手'], emoji:'🥑', kcal:380, time:'10 min', ingredients:'全麦吐司 1 片 · 牛油果半个 · 鸡蛋 1 个 · 黑胡椒', steps:'吐司烤至微脆。\n牛油果捣碎铺在吐司上。\n煎一个太阳蛋放上，撒黑胡椒。' },
+  { id:8, name:'三文鱼牛油果沙拉', cat:'午餐', tags:['高蛋白','低卡'], emoji:'🐟', kcal:425, time:'15 min', ingredients:'三文鱼 100g · 牛油果半个 · 混合生菜 · 柠檬汁', steps:'三文鱼煎熟或生食切片。\n牛油果切块，生菜洗净。\n所有食材摆盘，淋柠檬汁。' },
+  { id:9, name:'鸡胸肉蔬菜卷饼', cat:'午餐', tags:['高蛋白','低卡'], emoji:'🌯', kcal:395, time:'15 min', ingredients:'全麦饼皮 1 张 · 鸡胸肉 100g · 生菜 · 番茄 · 低脂酸奶酱', steps:'鸡胸肉煮熟切片。\n饼皮铺开，依次放上生菜、番茄、鸡肉。\n淋上酸奶酱，卷起切半。' },
+  { id:10, name:'清蒸鳕鱼配时蔬', cat:'晚餐', tags:['高蛋白','低卡'], emoji:'🐠', kcal:320, time:'20 min', ingredients:'鳕鱼 150g · 西兰花 · 胡萝卜 · 姜丝 · 蒸鱼豉油', steps:'鳕鱼解冻擦干，放姜丝。\n大火蒸 8-10 分钟。\n淋蒸鱼豉油，配焯水时蔬。' },
+  { id:11, name:'紫薯燕麦粥', cat:'早餐', tags:['素食','低卡'], emoji:'🍠', kcal:265, time:'15 min', ingredients:'紫薯 1 个 · 燕麦 40g · 牛奶 150ml · 蜂蜜少许', steps:'紫薯蒸熟切小块。\n燕麦与牛奶煮至浓稠。\n加入紫薯块搅拌，淋少许蜂蜜。' },
+  { id:12, name:'豆腐蘑菇味噌汤', cat:'晚餐', tags:['素食','低卡'], emoji:'🍄', kcal:185, time:'12 min', ingredients:'嫩豆腐 150g · 味噌 1 勺 · 香菇 · 海带 · 葱花', steps:'豆腐切小块，香菇切片。\n水烧开后加入海带和香菇。\n放入豆腐，关火后溶入味噌，撒葱花。' }
+];
+
+const tasks = ['早餐', '午餐', '晚餐', '运动 20 分钟', '饮水 8 杯', '早睡', '拉伸/放松'];
+const taskHints = [
+  '按今日餐单完成',
+  '按今日餐单完成',
+  '按今日餐单完成',
+  '给身体一点持续的能量',
+  '点击杯子逐杯记录饮水',
+  '让身体好好修复',
+  '放松肌肉，恢复状态'
+];
+
+// Water slider: max 1500ml, step 100ml
+const WATER_MAX_ML = 1500;
+const WATER_STEP_ML = 100;
+const WATER_STEPS = WATER_MAX_ML / WATER_STEP_ML; // 15 steps
+
+let category = '全部', tag = '全部', searchQuery = '';
+let currentMonth = new Date();
+const todayKey = () => new Date().toISOString().slice(0, 10);
+let selectedDateKey = todayKey(); // Track currently selected date for check-in editing
+const checkinHistory = JSON.parse(localStorage.getItem('lean-history') || '{}');
+const waterHistory = JSON.parse(localStorage.getItem('lean-water') || '{}');
+
+function dayState(key = todayKey()) { return checkinHistory[key] || {}; }
+function saveDay(key, data) {
+  checkinHistory[key] = data;
+  localStorage.setItem('lean-history', JSON.stringify(checkinHistory));
+}
+function getWater(key = todayKey()) { return waterHistory[key] || 0; }
+function setWater(key, count) {
+  waterHistory[key] = count;
+  localStorage.setItem('lean-water', JSON.stringify(waterHistory));
+}
+
+// ---- Rendering ----
+function renderCard(r) {
+  return `<article class="card" onclick="openRecipe(${r.id})" tabindex="0">
+    <div class="emoji">${r.emoji}</div>
+    <h4>${r.name}</h4>
+    <div class="meta">${r.cat} · ${r.kcal} kcal · ${r.time}</div>
+    ${r.tags.map(t => `<button class="badge" onclick="event.stopPropagation();filterByTag('${t}')">${t}</button>`).join('')}
+  </article>`;
+}
+
+function filterByTag(name) {
+  tag = name;
+  category = '全部';
+  showView('recipes');
+  updateFilterUI();
+  filterRecipes();
+}
+
+function handleSearch() {
+  searchQuery = document.querySelector('#searchInput').value.trim().toLowerCase();
+  filterRecipes();
+}
+
+function filterRecipes() {
+  let list = recipes.filter(r =>
+    (category === '全部' || r.cat === category) &&
+    (tag === '全部' || r.tags.includes(tag)) &&
+    (searchQuery === '' || r.name.toLowerCase().includes(searchQuery) || r.ingredients.toLowerCase().includes(searchQuery))
+  );
+  document.querySelector('#recipeGrid').innerHTML = list.length
+    ? list.map(renderCard).join('')
+    : '<div class="empty">没有找到匹配食谱</div>';
+  document.querySelector('#count').textContent = `${list.length} 份`;
+}
+
+function updateFilterUI() {
+  document.querySelectorAll('#chips button').forEach(b => b.classList.toggle('active', b.textContent === tag));
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b.textContent === category));
+}
+
+function openRecipe(id) {
+  const r = recipes.find(x => x.id === id);
+  document.querySelector('#detail').innerHTML = `
+    <div class="emoji" style="font-size:48px">${r.emoji}</div>
+    <h2>${r.name}</h2>
+    <div class="meta">${r.cat} · ${r.kcal} kcal · ${r.time}</div>
+    <div>${r.tags.map(t => `<span class="badge">${t}</span>`).join('')}</div>
+    <button class="recipe-check" onclick="markRecipeCheckin('${r.cat}')">✓ 加入今日${r.cat}打卡</button>
+    <h4>食材</h4><p style="color:#dfd2bd">${r.ingredients}</p>
+    <h4>制作步骤</h4>
+    <ol>${r.steps.split('\n').map(s => `<li>${s}</li>`).join('')}</ol>
+    <div class="source">营养数值为示例估算，请按个人需求调整份量。</div>
+  `;
+  document.querySelector('#modal').classList.add('show');
+}
+
+function markRecipeCheckin(cat) {
+  const i = tasks.indexOf(cat);
+  const data = dayState();
+  if (i >= 0) {
+    data[i] = true;
+    saveDay(todayKey(), data);
+  }
+  document.querySelector('#modal').classList.remove('show');
+  showView('checkin');
+  renderCheckin();
+}
+
+function toggleCheckin(i) {
+  const data = dayState(selectedDateKey);
+  data[i] = !data[i];
+  saveDay(selectedDateKey, data);
+
+  // Add animation to the clicked block
+  const blocks = document.querySelectorAll('.check-block');
+  if (blocks[i] && data[i]) {
+    blocks[i].style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      blocks[i].style.transform = '';
+    }, 200);
+  }
+
+  const ds = dayState(selectedDateKey);
+  const visibleIndexes = [0, 1, 2, 3, 5, 6];
+  const waterML = getWaterML(selectedDateKey);
+  if (visibleIndexes.every(idx => ds[idx]) && waterML >= 1500) {
+    celebrate();
+  }
+
+  renderCheckin();
+  showDayDetails(selectedDateKey);
+}
+
+function celebrate() {
+  const el = document.querySelector('#celebration');
+  const colors = ['#d7a958', '#9bb875', '#eac579', '#f8efdf', '#5bb5e8'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.top = '-10px';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDelay = Math.random() * 0.5 + 's';
+    c.style.animationDuration = (1 + Math.random()) + 's';
+    el.appendChild(c);
+  }
+  setTimeout(() => { el.innerHTML = ''; }, 2500);
+}
+
+// ---- Water Tracker ----
+function renderWater() {
+  const count = getWater();
+  const cups = document.querySelector('#waterCups');
+  let html = '';
+  for (let i = 0; i < 8; i++) {
+    const filled = i < count;
+    html += `<button class="water-cup ${filled ? 'filled' : ''}" onclick="toggleWaterCup(${i + 1})">
+      ${filled ? '💧' : ''}
+    </button>`;
+  }
+  cups.innerHTML = html;
+  document.querySelector('#waterCount').textContent = count;
+}
+
+function toggleWaterCup(target) {
+  const current = getWater();
+  const newCount = current === target ? target - 1 : target;
+  setWater(todayKey(), Math.max(0, newCount));
+  renderWater();
+
+  const data = dayState();
+  data[4] = newCount >= 8;
+  saveDay(todayKey(), data);
+  renderCheckin();
+}
+
+function resetWater() {
+  setWater(todayKey(), 0);
+  const data = dayState();
+  data[4] = false;
+  saveDay(todayKey(), data);
+  renderWater();
+  renderCheckin();
+}
+
+// ---- Stats ----
+function calcStreak() {
+  let n = 0, d = new Date();
+  while (true) {
+    const key = d.toISOString().slice(0, 10);
+    const state = dayState(key);
+    if (tasks.slice(0, 3).some((_, i) => state[i])) { n++; d.setDate(d.getDate() - 1); }
+    else break;
+  }
+  return n;
+}
+
+function calcBestStreak() {
+  const keys = Object.keys(checkinHistory).sort();
+  if (!keys.length) return 0;
+  let best = 0, current = 0;
+  const start = new Date(keys[0]);
+  const end = new Date();
+  const d = new Date(start);
+  while (d <= end) {
+    const key = d.toISOString().slice(0, 10);
+    const state = dayState(key);
+    if (tasks.slice(0, 3).some((_, i) => state[i])) {
+      current++;
+      best = Math.max(best, current);
+    } else {
+      current = 0;
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  return best;
+}
+
+function calcWeekRate() {
+  let done = 0, total = 0;
+  const d = new Date();
+  const visibleIndexes = [0, 1, 2, 3, 5, 6];
+  for (let i = 0; i < 7; i++) {
+    const key = d.toISOString().slice(0, 10);
+    const state = dayState(key);
+    const completed = visibleIndexes.filter(idx => state[idx]).length;
+    done += completed;
+    total += visibleIndexes.length;
+    d.setDate(d.getDate() - 1);
+  }
+  return total > 0 ? Math.round(done / total * 100) : 0;
+}
+
+function calcMonthDays() {
+  const now = new Date();
+  const year = now.getFullYear(), month = now.getMonth();
+  let days = 0;
+  for (let d = 1; d <= 31; d++) {
+    const date = new Date(year, month, d);
+    if (date.getMonth() !== month) break;
+    const key = date.toISOString().slice(0, 10);
+    const state = dayState(key);
+    if (tasks.slice(0, 3).some((_, i) => state[i])) days++;
+  }
+  return days;
+}
+
+function renderStats() {
+  const streak = calcStreak();
+  const bestStreak = calcBestStreak();
+  const weekRate = calcWeekRate();
+  const monthDays = calcMonthDays();
+
+  document.querySelector('#homeStreak').textContent = streak;
+  document.querySelector('#weekRate').textContent = weekRate + '%';
+  document.querySelector('#monthDays').textContent = monthDays;
+  document.querySelector('#bestStreak').textContent = bestStreak;
+
+  const dayNum = streak + 1;
+  document.querySelector('#heroDay').textContent = `DAY ${String(dayNum).padStart(2, '0')} · 持续前进`;
+}
+
+// ---- History / Heatmap ----
+function showDayDetails(key) {
+  const data = dayState(key);
+  const meal = tasks.slice(0, 3).map((t, i) =>
+    `<span class="status-block ${data[i] ? 'done' : 'not-done'}">${t}</span>`
+  ).join('');
+  const life = [3, 5, 6].map(i =>
+    `<span class="status-block ${data[i] ? 'done' : 'not-done'}">${tasks[i]}</span>`
+  ).join('');
+  const waterML = getWaterML(key);
+
+  document.querySelector('#dayDetails').innerHTML = `
+    <h4>${key} · 当日记录</h4>
+    <div class="detail-group">
+      <h5>饮食打卡</h5>${meal}
+    </div>
+    <div class="detail-group">
+      <h5>生活习惯</h5>${life}
+    </div>
+    <div class="detail-group">
+      <h5>饮水</h5>
+      <span class="status-block ${waterML >= 1500 ? 'done' : 'not-done'}">${waterML} / 1500 ml</span>
+    </div>
+  `;
+}
+
+function renderHistory() {
+  const heatmap = document.querySelector('#heatmap');
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
+  const today = new Date();
+  const todayStr = todayKey();
+
+  // Update header
+  document.querySelector('#calendarTitle').textContent = `${year} 年 ${month + 1} 月`;
+
+  // Calculate calendar days
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startWeekday = firstDay.getDay(); // 0 = Sunday
+  const daysInMonth = lastDay.getDate();
+
+  let days = [];
+  let completedCount = 0;
+  let partialCount = 0;
+  const visibleIndexes = [0, 1, 2, 3, 5, 6];
+
+  // Empty cells for days before the 1st
+  for (let i = 0; i < startWeekday; i++) {
+    days.push('<div class="day empty"></div>');
+  }
+
+  // Days of the month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    // Use local date string instead of toISOString() to avoid timezone issues
+    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const data = dayState(key);
+    const waterML = getWaterML(key);
+
+    const taskDone = visibleIndexes.filter(i => data[i]).length;
+    const waterDone = waterML >= 1500;
+    const allDone = taskDone === visibleIndexes.length && waterDone;
+    const partial = taskDone > 0 || waterML > 0;
+
+    const cls = [];
+    if (allDone) { cls.push('done'); completedCount++; }
+    else if (partial) { cls.push('partial'); partialCount++; }
+    if (key === todayStr) cls.push('today');
+    if (key === selectedDateKey) cls.push('selected');
+
+    days.push(`<button class="day ${cls.join(' ')}" data-day="${d}" title="${key}" onclick="selectDay('${key}')">${d}</button>`);
+  }
+
+  heatmap.innerHTML = days.join('');
+
+  // Update stats - show monthly summary
+  const remainingDays = daysInMonth - completedCount - partialCount;
+  document.querySelector('#historyStats').innerHTML =
+    `● 已完成<br><small style="font-size:11px;color:var(--muted);font-weight:normal;">${completedCount}天已完成 · ${partialCount}天将完成 · ${remainingDays}天未完成</small>`;
+  document.querySelector('#historyStats').className = completedCount > 0 ? 'done' : '';
+
+  showDayDetails(selectedDateKey);
+}
+
+function changeMonth(delta) {
+  currentMonth.setMonth(currentMonth.getMonth() + delta);
+  renderHistory();
+}
+
+function selectDay(key) {
+  selectedDateKey = key; // Set the selected date for editing
+  showView('checkin', true); // Keep the selected date when coming from calendar
+  renderCheckin(); // Re-render check-in UI for the selected date
+  showDayDetails(key);
+}
+
+// ---- Check-in List ----
+function renderTaskGroup(title, indexes, state) {
+  return `<div class="section-head"><h3>${title}打卡</h3></div>` +
+    indexes.map(i => {
+      const t = tasks[i];
+      return `<div class="check-card">
+        <div class="check-row">
+          <button class="check ${state[i] ? 'done' : ''}" onclick="toggleCheckin(${i})">
+            ${state[i] ? '✓' : ''}
+          </button>
+          <div class="check-title">
+            <b>${t}</b>
+            <small>${taskHints[i]}</small>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+// ---- Water Slider Functions ----
+function getWaterML(key = todayKey()) {
+  return (waterHistory[key] || 0) * WATER_STEP_ML; // Convert cups to ml
+}
+
+function setWaterML(key, ml) {
+  const cups = Math.round(ml / WATER_STEP_ML);
+  waterHistory[key] = cups;
+  localStorage.setItem('lean-water', JSON.stringify(waterHistory));
+}
+
+function renderWaterSlider() {
+  const currentML = getWaterML(selectedDateKey);
+  const percentage = (currentML / WATER_MAX_ML) * 100;
+  const steps = Math.round(currentML / WATER_STEP_ML);
+
+  const container = document.getElementById('waterSliderContainer');
+  if (!container) return;
+
+  // Create markers
+  let markersHTML = '';
+  for (let i = 0; i <= WATER_STEPS; i++) {
+    const isActive = i <= steps;
+    markersHTML += `<div class="water-marker ${isActive ? 'active' : ''}"></div>`;
+  }
+
+  container.innerHTML = `
+    <div class="water-slider-header">
+      <span style="color:var(--muted);font-size:13px;font-weight:600;">💧 饮水记录</span>
+      <b>${currentML} / ${WATER_MAX_ML} ml</b>
+    </div>
+    <div class="water-slider-track" id="waterTrack">
+      <div class="water-slider-fill" style="width:${percentage}%"></div>
+      <div class="water-slider-markers">${markersHTML}</div>
+      <div class="water-slider-thumb" id="waterThumb" style="left:${percentage}%"></div>
+    </div>
+    <div class="water-slider-labels">
+      <span>0ml</span>
+      <span>750ml</span>
+      <span>1500ml</span>
+    </div>
+  `;
+
+  // Add drag interaction
+  const track = document.getElementById('waterTrack');
+  if (track) {
+    setupWaterSlider(track);
+  }
+}
+
+function setupWaterSlider(track) {
+  let isDragging = false;
+  let lastClientX = 0;
+
+  function updateWater(clientX, isFinal = false) {
+    lastClientX = clientX;
+    const rect = track.getBoundingClientRect();
+    let percentage = (clientX - rect.left) / rect.width;
+    percentage = Math.max(0, Math.min(1, percentage));
+
+    // Calculate exact ML value (no snapping)
+    const currentML = Math.round(percentage * WATER_MAX_ML);
+
+    // Update UI directly (without re-rendering)
+    const fill = track.querySelector('.water-slider-fill');
+    const thumb = track.querySelector('.water-slider-thumb');
+    const markers = track.querySelectorAll('.water-marker');
+    const displayPercentage = (currentML / WATER_MAX_ML) * 100;
+    const steps = Math.round(currentML / WATER_STEP_ML);
+
+    if (fill) fill.style.width = displayPercentage + '%';
+    if (thumb) {
+      thumb.style.left = displayPercentage + '%';
+    }
+
+    // Update markers based on nearest step
+    markers.forEach((marker, i) => {
+      marker.classList.toggle('active', i <= steps);
+    });
+
+    // Update header text
+    const header = track.parentElement.querySelector('.water-slider-header b');
+    if (header) header.textContent = `${currentML} / ${WATER_MAX_ML} ml`;
+
+    // Save immediately
+    setWaterML(selectedDateKey, currentML);
+
+    // Only re-render other parts when dragging ends
+    if (isFinal) {
+      renderCheckin(); // Update progress bar and stats
+      showDayDetails(selectedDateKey); // Update day details
+    }
+  }
+
+  function startDrag(clientX) {
+    isDragging = true;
+    updateWater(clientX, false);
+  }
+
+  function endDrag() {
+    if (isDragging) {
+      isDragging = false;
+      updateWater(lastClientX, true);
+    }
+  }
+
+  track.addEventListener('mousedown', (e) => {
+    startDrag(e.clientX);
+  });
+
+  track.addEventListener('touchstart', (e) => {
+    startDrag(e.touches[0].clientX);
+  }, { passive: true });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) updateWater(e.clientX, false);
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) updateWater(e.touches[0].clientX, false);
+  }, { passive: true });
+
+  document.addEventListener('mouseup', endDrag);
+  document.addEventListener('touchend', endDrag);
+}
+
+// ---- Compact Check-in Rendering ----
+function renderCompactMealGroup(state) {
+  const meals = [
+    { index: 0, name: '早餐', hint: '按今日餐单完成' },
+    { index: 1, name: '午餐', hint: '按今日餐单完成' },
+    { index: 2, name: '晚餐', hint: '按今日餐单完成' }
+  ];
+
+  const blocks = meals.map(m => {
+    const done = state[m.index];
+    return `<div class="check-block ${done ? 'done' : ''}" onclick="toggleCheckin(${m.index})">
+      <b>${done ? '✓' : ''} ${m.name}</b>
+      <small>${m.hint}</small>
+    </div>`;
+  }).join('');
+
+  return `<div class="check-group">
+    <div class="check-group-title">🍽️ 饮食打卡</div>
+    <div class="check-blocks">${blocks}</div>
+  </div>`;
+}
+
+function renderCompactLifeGroup(state) {
+  const habits = [
+    { index: 3, name: '运动', hint: '给身体一点持续的能量', icon: '🏃' },
+    { index: 6, name: '拉伸/放松', hint: '放松肌肉，恢复状态', icon: '🧘' },
+    { index: 5, name: '早睡', hint: '让身体好好修复', icon: '😴' }
+  ];
+
+  const blocks = habits.map(h => {
+    const done = state[h.index];
+    return `<div class="check-block ${done ? 'done' : ''}" onclick="toggleCheckin(${h.index})">
+      <b>${done ? '✓' : ''} ${h.icon} ${h.name}</b>
+      <small>${h.hint}</small>
+    </div>`;
+  }).join('');
+
+  return `<div class="check-group">
+    <div class="check-group-title">💪 生活习惯</div>
+    <div class="check-blocks">${blocks}</div>
+  </div>`;
+}
+
+function renderCheckin() {
+  const state = dayState(selectedDateKey);
+  const visibleIndexes = [0, 1, 2, 3, 5, 6];
+  const done = visibleIndexes.filter(i => state[i]).length;
+  const waterML = getWaterML(selectedDateKey);
+  const waterDone = waterML >= 1500; // Full completion at 1500ml
+  const allDone = done === visibleIndexes.length && waterDone;
+  const total = visibleIndexes.length + 1;
+  const p = Math.round((done + (waterDone ? 1 : 0)) / total * 100);
+
+  // Update date display
+  const isToday = selectedDateKey === todayKey();
+  document.querySelector('#checkinDate').textContent = isToday ? '今天' : selectedDateKey;
+
+  // Render compact groups
+  document.querySelector('#checkList').innerHTML =
+    renderCompactMealGroup(state) +
+    '<div id="waterSliderContainer"></div>' +
+    renderCompactLifeGroup(state);
+
+  // Render water slider for selected date
+  renderWaterSlider();
+
+  document.querySelector('#bar').style.width = p + '%';
+  document.querySelector('#progressText').textContent =
+    allDone ? `${done} / ${visibleIndexes.length} 项 + 饮水已完成` :
+    `${done} / ${visibleIndexes.length} 项${waterDone ? '' : '，饮水 ' + waterML + 'ml'}${done < visibleIndexes.length ? '，还差 ' + (visibleIndexes.length - done) + ' 项' : ''}`;
+  document.querySelector('#checkTitle').textContent =
+    allDone ? ' 全部完成，做得很好！' :
+    done >= 4 && waterDone ? '大部分已打卡，继续保持！' :
+    done > 0 ? `已打卡 ${done} 项，继续加油` : '完成今天的第一步';
+  document.querySelector('#homeProgress').textContent = p + '%';
+
+  renderStats();
+  renderHistory();
+}
+
+// ---- Meal Plan ----
+function randomMealPlan() {
+  const picked = ['早餐', '午餐', '晚餐'].map(cat => {
+    const list = recipes.filter(r => r.cat === cat);
+    return list[Math.floor(Math.random() * list.length)];
+  });
+  const totalKcal = picked.reduce((s, r) => s + r.kcal, 0);
+  document.querySelector('#homeKcal').textContent = totalKcal.toLocaleString();
+
+  const icons = ['☀️', '◑', '☾'];
+  document.querySelector('#mealPlan').innerHTML = picked.map((r, i) =>
+    `<article class="meal-card" onclick="openRecipe(${r.id})">
+      <div class="meal-card-head">
+        <div class="meal-icon">${icons[i]}</div>
+        <div>
+          <b>${r.cat} · ${r.name}</b>
+          <div class="meta">${r.kcal} kcal · ${r.time}</div>
+        </div>
+      </div>
+      <div>${r.tags.map(t => `<button class="badge" onclick="event.stopPropagation();filterByTag('${t}')">${t}</button>`).join('')}</div>
+    </article>`
+  ).join('');
+}
+
+// ---- Export / Import ----
+function exportData() {
+  const data = {
+    checkin: checkinHistory,
+    water: waterHistory,
+    exportedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `lean-daily-backup-${todayKey()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData() {
+  document.querySelector('#importFile').click();
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.checkin) {
+        Object.assign(checkinHistory, data.checkin);
+        localStorage.setItem('lean-history', JSON.stringify(checkinHistory));
+      }
+      if (data.water) {
+        Object.assign(waterHistory, data.water);
+        localStorage.setItem('lean-water', JSON.stringify(waterHistory));
+      }
+      renderCheckin();
+      alert('数据导入成功！');
+    } catch (err) {
+      alert('导入失败：文件格式不正确');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ---- Navigation ----
+function showView(id, keepSelectedDate = false) {
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
+  document.querySelectorAll('.bottom button').forEach(b => b.classList.toggle('active', b.dataset.view === id));
+
+  // Reset selected date to today when switching to check-in view via bottom nav (not from calendar)
+  if (id === 'checkin' && !keepSelectedDate) {
+    selectedDateKey = todayKey();
+  }
+
+  if (id === 'checkin') {
+    renderCheckin();
+  }
+  if (id === 'home') {
+    randomMealPlan();
+  }
+  if (id === 'recipes') {
+    filterRecipes();
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---- Init ----
+document.querySelectorAll('[data-view]').forEach(b => {
+  b.onclick = () => showView(b.dataset.view);
+});
+
+document.querySelector('#close').onclick = () =>
+  document.querySelector('#modal').classList.remove('show');
+
+document.querySelector('#modal').onclick = e => {
+  if (e.target.id === 'modal') e.currentTarget.classList.remove('show');
+};
+
+document.querySelector('#tabs').innerHTML = ['全部', '早餐', '午餐', '晚餐'].map(x =>
+  `<button class="${x === '全部' ? 'active' : ''}" onclick="category='${x}';updateFilterUI();filterRecipes()">${x}</button>`
+).join('');
+
+document.querySelector('#chips').innerHTML = ['全部', '高蛋白', '低卡', '快手', '素食'].map(x =>
+  `<button class="${x === '全部' ? 'active' : ''}" onclick="tag='${x}';updateFilterUI();filterRecipes()">${x}</button>`
+).join('');
+
+const dateStr = new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+document.querySelector('#today').textContent = dateStr;
+document.querySelector('#checkinDate').textContent = dateStr;
+
+filterRecipes();
+randomMealPlan();
+renderCheckin();
+renderHistory();
+
+// ---- Mosaic Banner (TRAE-style Canvas distortion) ----
+(function() {
+  const canvas = document.getElementById('mosaicCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const banner = canvas.parentElement;
+  const CELL = 6;
+  const RADIUS = 70;
+  const FORCE = 35;
+  const LERP = 0.1;
+  const BG = [42, 32, 24];
+  let W, H, dpr, blocks = [];
+  let mx = -999, my = -999;
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    W = banner.clientWidth;
+    H = banner.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    buildBlocks();
+  }
+
+  function buildBlocks() {
+    const off = document.createElement('canvas');
+    off.width = W;
+    off.height = H;
+    const oc = off.getContext('2d');
+
+    oc.fillStyle = `rgb(${BG[0]},${BG[1]},${BG[2]})`;
+    oc.fillRect(0, 0, W, H);
+
+    const fontSize = Math.max(28, Math.min(64, W / 10));
+    oc.font = `900 ${fontSize}px Georgia, serif`;
+    oc.fillStyle = '#d7a958';
+    oc.textAlign = 'center';
+    oc.textBaseline = 'middle';
+    oc.fillText('LEAN DAILY \u00B7 \u8F7B\u76C8\u8BA1\u5212', W / 2, H / 2);
+
+    const imgData = oc.getImageData(0, 0, W, H).data;
+    blocks = [];
+
+    for (let y = 0; y < H; y += CELL) {
+      for (let x = 0; x < W; x += CELL) {
+        const cx = Math.min(x + (CELL >> 1), W - 1);
+        const cy = Math.min(y + (CELL >> 1), H - 1);
+        const idx = (cy * W + cx) << 2;
+        const r = imgData[idx], g = imgData[idx + 1], b = imgData[idx + 2];
+        const dr = r - BG[0], dg = g - BG[1], db = b - BG[2];
+        const isText = Math.abs(dr) + Math.abs(dg) + Math.abs(db) > 60;
+        blocks.push({
+          ox: x, oy: y,
+          dx: 0, dy: 0,
+          r: r, g: g, b: b,
+          isText: isText
+        });
+      }
+    }
+  }
+
+  function animate() {
+    ctx.fillStyle = `rgb(${BG[0]},${BG[1]},${BG[2]})`;
+    ctx.fillRect(0, 0, W, H);
+
+    const r2 = RADIUS * RADIUS;
+
+    for (let i = 0, len = blocks.length; i < len; i++) {
+      const bl = blocks[i];
+      let tx = 0, ty = 0;
+
+      if (bl.isText) {
+        const bx = bl.ox + (CELL >> 1);
+        const by = bl.oy + (CELL >> 1);
+        const ex = bx - mx, ey = by - my;
+        const d2 = ex * ex + ey * ey;
+
+        if (d2 < r2 && d2 > 0) {
+          const dist = Math.sqrt(d2);
+          const f = (1 - dist / RADIUS);
+          const force = f * f * FORCE;
+          tx = (ex / dist) * force;
+          ty = (ey / dist) * force;
+        }
+      }
+
+      bl.dx += (tx - bl.dx) * LERP;
+      bl.dy += (ty - bl.dy) * LERP;
+
+      const px = bl.ox + bl.dx;
+      const py = bl.oy + bl.dy;
+      const s = CELL - 1;
+
+      ctx.fillStyle = `rgb(${bl.r},${bl.g},${bl.b})`;
+      ctx.fillRect(px, py, s, s);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  banner.addEventListener('mousemove', function(e) {
+    const rect = banner.getBoundingClientRect();
+    mx = e.clientX - rect.left;
+    my = e.clientY - rect.top;
+  });
+
+  banner.addEventListener('mouseleave', function() {
+    mx = -999;
+    my = -999;
+  });
+
+  banner.addEventListener('touchmove', function(e) {
+    const rect = banner.getBoundingClientRect();
+    mx = e.touches[0].clientX - rect.left;
+    my = e.touches[0].clientY - rect.top;
+  }, { passive: true });
+
+  banner.addEventListener('touchend', function() {
+    mx = -999;
+    my = -999;
+  });
+
+  window.addEventListener('resize', resize);
+  resize();
+  animate();
+})();
+</script>
+</body>
+</html>
